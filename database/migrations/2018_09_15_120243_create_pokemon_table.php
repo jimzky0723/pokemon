@@ -18,6 +18,8 @@ class CreatePokemonTable extends Migration
             $table->string('name');
             $table->string('image');
             $table->string('rarity');
+            $table->integer('level');
+            $table->string('image');
             $table->timestamps();
         });
     }

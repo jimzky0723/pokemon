@@ -61,6 +61,7 @@
                     </form>
                 </div>
             </div>
+            @include('page.donate')
         </div>
 
         <div class="col-md-8">
@@ -77,7 +78,7 @@
                         @foreach($data as $row)
                             <div class="col-sm-4">
                                 <div class="card my-4 background-{{ strtolower($row->rarity) }}">
-                                    <a href="{{ url('pokemon/info/'.$row->id) }}">
+                                    <a href="#">
                                         <img class="card-img-top img-thumbnail" src="{{ url('uploads/'.$row->image) }}" alt="Card image cap">
                                     </a>
                                     <div class="card-body card-list" style="padding: 0px;">

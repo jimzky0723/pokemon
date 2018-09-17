@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Map;
 use App\Pokemon;
 use App\PokemonType;
+use App\Suggestion;
 use App\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
@@ -35,7 +36,9 @@ class AdminCtrl extends Controller
             $data = $data->join('pokemontype','pokemontype.pokemonId','=','pokemon.id')
                     ->where('pokemontype.typeId',$type);
         }
-        $data = $data->orderBy('pokemon.name','asc')->paginate(12);
+        $data = $data->orderBy('pokemon.level','asc')
+                ->orderBy('pokemon.name','asc')
+                ->paginate(12);
 
         return view('admin.pokemon',[
             'type' => Type::orderBy('name','asc')->get(),
@@ -58,7 +61,8 @@ class AdminCtrl extends Controller
     {
         $data = array(
             'name' => $request->name,
-            'rarity' => $request->rarity
+            'rarity' => $request->rarity,
+            'level' => self::rarityInNumber($request->rarity)
         );
         if(Input::hasFile('file')){
             $filename = self::uploadPicture($request);
@@ -102,6 +106,25 @@ class AdminCtrl extends Controller
         return $filename;
     }
 
+    public function rarityInNumber($rarity)
+    {
+        switch ($rarity){
+            case 'Mythical':
+                return 1;
+            case 'Legendary':
+                return 2;
+            case 'Epic':
+                return 3;
+            case 'Rare':
+                return 4;
+            case 'Normal':
+                return 5;
+            case 'Common':
+                return 6;
+            default:
+                return 0;
+        }
+    }
 
     public function savePokemon(Request $request)
     {
@@ -114,6 +137,7 @@ class AdminCtrl extends Controller
         $tbl = new Pokemon();
         $tbl->name = $request->name;
         $tbl->rarity = $request->rarity;
+        $tbl->level = self::rarityInNumber($request->rarity);
         $tbl->image = $filename;
         $tbl->save();
 
@@ -209,6 +233,7 @@ class AdminCtrl extends Controller
         return view('admin.map',[
             'data' => $data,
             'info' => $info,
+            'map' => Map::select('name')->orderBy('name','asc')->groupBy('name')->get(),
             'common' => Pokemon::where('rarity','Common')->orderBy('name','asc')->get(),
             'normal' => Pokemon::where('rarity','Normal')->orderBy('name','asc')->get(),
             'rare' => Pokemon::where('rarity','Rare')->orderBy('name','asc')->get(),
@@ -274,5 +299,18 @@ class AdminCtrl extends Controller
     {
         Map::where('id',$id)->delete();
         return redirect('admin/map')->with('deleted',true);
+    }
+
+    public function suggestion()
+    {
+        return view('admin.suggestion',[
+            'data' => Suggestion::orderBy('id','desc')->paginate(20)
+        ]);
+    }
+
+    public function deleteSuggestion($id)
+    {
+        Suggestion::where('id',$id)->delete();
+        return redirect()->back()->with('deleted',true);
     }
 }

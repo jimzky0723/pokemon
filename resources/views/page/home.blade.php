@@ -2,6 +2,15 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ url('/') }}/vendor/select2/css/select2.min.css"/>
+    <style>
+        .disclaimer {
+            text-align: justify;
+            color: #404040;
+            background: #fffec3;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -28,6 +37,14 @@
             <hr />
             <div class="embed-responsive embed-responsive-16by9">
                 <iframe class="embed-responsive-item" src="{{ url('video/video.mp4') }}" loop="true" controls="false"></iframe>
+            </div>
+            <hr />
+            <div class="disclaimer">
+                <h3>Disclaimer</h3>
+                <p>Welcome to Legend Trainer Guide! This is a free site for all trainers for easy hunting of Pokemon.</p>
+                <p>The information provided by our website is for general information purposes and guidance only. All information on the site is based on the Legend Trainer Game and has been approved by the Owner of the Game. However, we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability or completeness of any information on the site.</p>
+                <p>Under no circumstance shall we have any liability to you for any loss or damage of any kind incurred as a result of the use of the site. Your use of the site and your reliance on any information on the site is solely at your own risk.</p>
+
             </div>
             <!-- Preview Image -->
 
@@ -80,49 +97,18 @@
             <div class="card text-white bg-dark  my-4">
                 <div class="card-header">Search Pokemon on Map</div>
                 <div class="card-body">
-                    <form method="post" action="{{ asset('map/search') }}">
-                        {{ csrf_field() }}
-                        <?php
-                        $keyword = \Illuminate\Support\Facades\Session::get('mapKeyword');
-                        $tmpPokemon = 0;
-                        $tmpName = '';
-                        $rarity = \Illuminate\Support\Facades\Session::get('rarityMapKeyword');
-                        if($keyword){
-                            $keyword = (object)$keyword;
-                            $tmpPokemon = $keyword->pokemon;
-                            $tmpName = $keyword->name;
-                        }
-                        ?>
-                        <div class="form-group">
-                            <label>Map Keyword</label>
-                            <input type="text" class="form-control" value="{{ $tmpName }}" autocomplete="off"  name="map" placeholder="Enter Keyword">
-                        </div>
-                        <div class="form-group">
-                            <label>Pokemon</label>
-                            <select class="select2 form-control" name="pokemon">
-                                <option value="">Any</option>
-                                <?php $pokemon = \App\Pokemon::get(); ?>
-                                @foreach($pokemon as $row)
-                                    <option @if($tmpPokemon==$row->id) selected @endif value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Rarity</label>
-                            <select class="select2 form-control" name="rarity">
-                                <option value="">Any</option>
-                                <option @if($rarity=='common') selected @endif value="common">Common</option>
-                                <option @if($rarity=='normal') selected @endif value="normal">Normal</option>
-                                <option @if($rarity=='rare') selected @endif value="rare">Rare</option>
-                                <option @if($rarity=='epicOrLegendary') selected @endif value="epicOrLegendary">Epic/Legendary</option>
-                            </select>
-                        </div>
-                        <hr />
-                        <button class="btn btn-success btn-block" type="submit">Search</button>
-                    </form>
+                    <a href="http://kdnxen.pokemongj.com/download.php" target="_blank" class="btn btn-block btn-success">
+                        Download Game
+                    </a>
+                    <a href="http://pay.lzcservice.com/lzc/kdnxPayE.html" target="_blank" class="btn btn-block btn-warning">
+                        Recharge Link
+                    </a>
+                    <a href="https://www.facebook.com/Legend-Trainer-195039927987143/" target="_blank" class="btn btn-block btn-info">
+                        Fan Page
+                    </a>
                 </div>
             </div>
-
+            @include('page.donate')
         </div>
     </div>
 @endsection

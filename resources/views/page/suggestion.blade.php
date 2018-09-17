@@ -51,6 +51,7 @@
                     </form>
                 </div>
             </div>
+            @include('page.donate')
         </div>
 
         <div class="col-md-8">

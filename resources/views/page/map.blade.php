@@ -38,8 +38,13 @@
                         }
                         ?>
                         <div class="form-group">
-                            <label>Map Keyword</label>
-                            <input type="text" class="form-control" value="{{ $tmpName }}" autocomplete="off"  name="map" placeholder="Enter Keyword">
+                            <label>Select Map</label>
+                            <select class="select2 form-control" name="map">
+                                <option value="">Any</option>
+                                @foreach($map as $row)
+                                    <option @if($tmpName==$row->name) selected @endif>{{ $row->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Pokemon</label>
@@ -66,6 +71,7 @@
                     </form>
                 </div>
             </div>
+            @include('page.donate')
         </div>
 
         <div class="col-md-8">
@@ -125,11 +131,13 @@
                                                 <label>Epic / Legendary:</label><br />
                                                 <span class="{{ strtolower($info->rarity) }}">{{ $info->name }}</span>
                                             </li>
+                                            @if(\Illuminate\Support\Facades\Session::get('isLogin'))
                                             <li class="list-group-item text-right" style="padding-top:8px;">
                                                 <a href="{{ url('admin/map/update/'.$row->id) }}" class="btn btn-sm btn-info">Edit</a>
                                                 <a href="#" data-link="{{ url('admin/map/delete/'.$row->id) }}" class="btn-delete btn btn-sm btn-danger">Delete</a>
 
                                             </li>
+                                            @endif
                                         </ul>
                                     </div>
                                 </div>

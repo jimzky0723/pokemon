@@ -2,6 +2,15 @@
 <html lang="en">
 
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-125809869-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-125809869-1');
+    </script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,6 +24,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{{ url('/') }}/css/blog-post.css" rel="stylesheet">
+    <link rel="icon" href="{{ url('/') }}/favicon.png" type="image/x-icon"/>
     <style>
         .content-right {
             border-left: 2px solid #ccc;
@@ -60,8 +70,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ url('/') }}">Home
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url('/') }}/">Home
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
@@ -71,9 +81,23 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('map') }}">Map</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Tips and Tricks
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="https://www.facebook.com/notes/legend-trainer/tips-tricks-mounts-and-bridles/279967172827751/" target="_blank">Mounts and Bridles</a>
+                        <a class="dropdown-item" href="https://www.facebook.com/notes/legend-trainer/tips-tricks-starting-out/273427896815012/" target="_blank">Starting Out</a>
+                        <a class="dropdown-item" href="https://www.facebook.com/notes/legend-trainer/tips-tricks-david-goliath/245465986277870/" target="_blank">David & Goliath</a>
+                        <a class="dropdown-item" href="https://www.facebook.com/notes/legend-trainer/tips-tricks-gpu-rendering-smoother-graphics/263121331179002/" target="_blank">GPU Rendering</a>
+                        <a class="dropdown-item" href="https://www.facebook.com/notes/legend-trainer/tips-tricks-path-of-zenith/242533823237753/" target="_blank">Path of Zenith</a>
+
+                    </div>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url('suggestion') }}">Any Suggestion?</a>
                 </li>
+
                 @if(\Illuminate\Support\Facades\Session::get('isLogin'))
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -83,6 +107,7 @@
                         <a class="dropdown-item" href="{{ url('admin/pokemon') }}">Pokemon</a>
                         <a class="dropdown-item" href="{{ url('admin/pokemon/type') }}">Pokemon Type</a>
                         <a class="dropdown-item" href="{{ url('admin/map') }}">Map</a>
+                        <a class="dropdown-item" href="{{ url('admin/suggestion') }}">Suggestions</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('/logout') }}">Logout</a>
                     </div>
@@ -111,6 +136,12 @@
 <script src="{{ url('/') }}/vendor/jquery/jquery.min.js"></script>
 <script src="{{ url('/') }}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 @yield('script')
+
+<script>
+    var filename = window.location.href;
+    $('a[href="'+filename+'"]').parent('li').addClass('active');
+    console.log(filename);
+</script>
 </body>
 
 </html>

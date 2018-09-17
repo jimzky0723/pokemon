@@ -119,7 +119,7 @@
                                     <option @if($info->rarity=='Rare') selected @endif>Rare</option>
                                     <option @if($info->rarity=='Epic') selected @endif>Epic</option>
                                     <option @if($info->rarity=='Legendary') selected @endif>Legendary</option>
-                                    <option @if($info->rarity=='Mythical') selected @endif>Legendary</option>
+                                    <option @if($info->rarity=='Mythical') selected @endif>Mythical</option>
                                 </select>
                             </div>
                             <div class="form-group">

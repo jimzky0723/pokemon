@@ -51,3 +51,6 @@ Route::get('/admin/map/update/{id}','AdminCtrl@editMap');
 Route::post('/admin/map/update','AdminCtrl@updateMap');
 Route::post('/admin/map/search','AdminCtrl@searchMap');
 Route::get('/admin/map/search','AdminCtrl@searchMap');
+
+Route::get('/admin/suggestion','AdminCtrl@suggestion');
+Route::get('/admin/suggestion/delete/{id}','AdminCtrl@deleteSuggestion');

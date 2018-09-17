@@ -30,7 +30,9 @@ class PokemonCtrl extends Controller
                 ->where('pokemontype.typeId',$type);
         }
 
-        $data = $data->orderBy('pokemon.name','asc')->paginate(12);
+        $data = $data->orderBy('pokemon.level','asc')
+            ->orderBy('pokemon.name','asc')
+            ->paginate(12);
 
         return view('page.pokemon',[
             'type' => Type::orderBy('name','asc')->get(),
@@ -78,6 +80,7 @@ class PokemonCtrl extends Controller
             ->paginate(12);
         return view('page.map',[
             'data' => $data,
+            'map' => Map::select('name')->orderBy('name','asc')->groupBy('name')->get(),
             'common' => Pokemon::where('rarity','Common')->orderBy('name','asc')->get(),
             'normal' => Pokemon::where('rarity','Normal')->orderBy('name','asc')->get(),
             'rare' => Pokemon::where('rarity','Rare')->orderBy('name','asc')->get(),
@@ -124,12 +127,13 @@ class PokemonCtrl extends Controller
     public function sendSuggestion(Request $request)
     {
         $q = new Suggestion();
+        $q->ipAddress = $request->ip();
         $q->name = $request->name;
         $q->server = $request->serverName;
         $q->message = $request->message;
+        $q->status = 0;
         $q->save();
 
         return redirect()->back()->with('sent',true);
-
     }
 }

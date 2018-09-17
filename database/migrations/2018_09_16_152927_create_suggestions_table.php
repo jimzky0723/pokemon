@@ -15,9 +15,11 @@ class CreateSuggestionsTable extends Migration
     {
         Schema::create('suggestions', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('ipAddress');
             $table->string('name');
             $table->string('server');
             $table->text('message');
+            $table->integer('status');
             $table->timestamps();
         });
     }

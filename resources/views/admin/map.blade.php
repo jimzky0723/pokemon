@@ -62,8 +62,13 @@
                             }
                         ?>
                         <div class="form-group">
-                            <label>Map Keyword</label>
-                            <input type="text" class="form-control" value="{{ $tmpName }}" autocomplete="off"  name="map" placeholder="Enter Keyword">
+                            <label>Select Map</label>
+                            <select class="select2 form-control" name="map">
+                                <option value="">Any</option>
+                                @foreach($map as $row)
+                                    <option @if($tmpName==$row->name) selected @endif>{{ $row->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label>Pokemon</label>
