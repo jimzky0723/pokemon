@@ -34,24 +34,28 @@
         .bg-dark, .bg-primary, .bg-success, .bg-danger {
             color: #fff;
         }
-        .legendary,.epic,.rare,.normal,.common{
-            font-weight: bold;
+        .legendary,.epic,.rare,.normal,.common,.mythical{
+            font-weight: 500;
         }
-        .mythical { color: #B22222; }
+        .mythical { color: #e65353; }
         .legendary { color: #FFA500; }
-        .epic { color: #9932CC }
-        .rare { color: #0000FF }
+        .epic { color: #aa5fd0 }
+        .rare { color: #6b6bff }
         .normal { color: #17d721}
         .common { color: #8d8d8d }
 
-        .background-mythical { background: #B22222; }
+        .background-mythical { background: #e65353; }
         .background-legendary { background: #FFA500; }
-        .background-epic { background: #9932CC }
-        .background-rare { background: #0000FF }
+        .background-epic { background: #aa5fd0 }
+        .background-rare { background: #6b6bff }
         .background-normal { background: #17d721}
         .background-common { background: #8d8d8d }
 
         .pull-right { float: right; }
+        a { text-decoration: none !important; }
+        .card-body .active {
+            background: none;
+        }
     </style>
     @yield('css')
 
@@ -141,7 +145,7 @@
 <script>
     var filename = window.location.href;
     $('a[href="'+filename+'"]').parent('li').addClass('active');
-    console.log(filename);
+    $('.card-body a[href="'+filename+'"]').parent('li').removeClass('active');
 </script>
 </body>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Evolve;
 use App\Map;
 use App\Pokemon;
 use App\PokemonType;
@@ -303,101 +304,98 @@ class AdminCtrl extends Controller
 
     public function evolve($info = null)
     {
-        $session = Session::get('pokemonEvolveKeyword');
-        $rarity = Session::get('rarityEvolveKeyword');
-        $data = Map::select('*');
-        if($session)
-        {
-            $session = (object)$session;
-            if($session->name)
-            {
-                $data = $data->where('name','like',"%$session->name%");
-            }
-            if($session->pokemon)
-            {
-                $data = $data->where(function($q) use ($session) {
-                    $q->where('common',$session->pokemon)
-                        ->orwhere('normal',$session->pokemon)
-                        ->orwhere('rare',$session->pokemon)
-                        ->orwhere('epicOrLegendary',$session->pokemon);
-                });
-            }
+        $data = Evolve::select('evolves.*');
+        $pokemon = Session::get('evolvePokemon');
+        if($pokemon){
+            $data = $data->join('pokemon','pokemon.evolve','=','evolves.id')
+                        ->where('pokemon.id',$pokemon);
         }
-        if($rarity)
-        {
-            $data = $data->where($rarity,'>',0);
-        }
-        $data = $data->orderBy('name','asc')
+        $data = $data->orderBy('evolves.id','desc')
             ->paginate(12);
-        return view('admin.map',[
+
+        $pokemon = Pokemon::where('evolve',0);
+        if($info){
+            $pokemon = $pokemon->orwhere('evolve',$info->id);
+        }
+        $pokemon = $pokemon->orderBy('name','asc')->get();
+
+        return view('admin.evolve',[
             'data' => $data,
             'info' => $info,
-            'map' => Map::select('name')->orderBy('name','asc')->groupBy('name')->get(),
-            'common' => Pokemon::where('rarity','Common')->orderBy('name','asc')->get(),
-            'normal' => Pokemon::where('rarity','Normal')->orderBy('name','asc')->get(),
-            'rare' => Pokemon::where('rarity','Rare')->orderBy('name','asc')->get(),
-            'legendary' => Pokemon::where('rarity','Legendary')
-                ->orwhere('rarity','Epic')
-                ->orderBy('name','asc')
-                ->get(),
+            'pokemon' => $pokemon,
+            'all' => Pokemon::orderBy('name','asc')->get(),
         ]);
     }
 
     public function searchEvolve(Request $request)
     {
         if($request->isMethod('post')){
-            $data = array(
-                'name' => $request->map,
-                'pokemon' => $request->pokemon
-            );
-            Session::put('rarityMapKeyword',$request->rarity);
-            Session::put('mapKeyword',$data);
+            Session::put('evolvePokemon',$request->pokemon);
         }
-        return self::map();
+        return self::evolve();
     }
 
     public function editEvolve($id)
     {
-        $info = Map::find($id);
-        return self::map($info);
+        $info = Evolve::find($id);
+        return self::evolve($info);
     }
 
     public function saveEvolve(Request $request)
     {
-        $tbl = new Map();
-        $tbl->name = $request->name;
-        $tbl->common = $request->common;
-        $tbl->normal = $request->normal;
-        $tbl->rare = $request->rare;
-        $tbl->epicOrLegendary = $request->epicOrLegendary;
-        $tbl->save();
 
-        Session::put('mapKeyword',[
-            'name' => $request->name,
-            'pokemon' => ''
-        ]);
+        $data = array(
+            'base' => $request->base,
+            'lvl15' => $request->lvl15,
+            'lvl22' => $request->lvl22,
+            'mega' => $request->mega
+        );
+        $id = Evolve::insertGetId($data);
+        foreach($data as $key => $value){
+            if($data[$key]){
+                Pokemon::where('id',$value)
+                    ->update([
+                        'evolve' => $id
+                    ]);
+            }
+        }
+
         return redirect()->back()->with('added',true);
     }
 
-    public function updateEvolve(Request $request)
-    {
 
-        Map::where('id',$request->currentId)
-            ->update([
-                'name' => $request->name,
-                'common' => $request->common,
-                'normal' => $request->normal,
-                'rare' => $request->rare,
-                'epicOrLegendary' => $request->epicOrLegendary,
-            ]);
+    public function updateEvolve(Request $request,$id)
+    {
+        Pokemon::where('evolve',$id)->update(['evolve' => 0]);
+        $data = array(
+            'base' => $request->base,
+            'lvl15' => $request->lvl15,
+            'lvl22' => $request->lvl22,
+            'mega' => $request->mega
+        );
+
+        Evolve::where('id',$id)
+            ->update($data);
+
+        foreach($data as $key => $value){
+            if($data[$key]){
+                Pokemon::where('id',$value)
+                    ->update([
+                        'evolve' => $id
+                    ]);
+            }
+        }
 
         return redirect()->back()->with('updated',true);
     }
 
     public function deleteEvolve($id)
     {
-        Map::where('id',$id)->delete();
-        return redirect('admin/map')->with('deleted',true);
+        Evolve::where('id',$id)->delete();
+        Pokemon::where('evolve',$id)->update([
+            'evolve' => 0
+        ]);
+        return redirect('admin/pokemon/evolve')->with('deleted',true);
     }
 
     public function suggestion()

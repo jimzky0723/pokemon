@@ -23,9 +23,12 @@ Route::get('/pokemon','PokemonCtrl@index');
 Route::post('/pokemon/search','PokemonCtrl@searchPokemon');
 Route::get('/pokemon/search','PokemonCtrl@searchPokemon');
 
+Route::get('/pokemon/info/{id}','PokemonCtrl@pokemonInfo');
+
 Route::get('/map','PokemonCtrl@map');
 Route::get('/map/search','PokemonCtrl@searchMap');
 Route::post('/map/search','PokemonCtrl@searchMap');
+Route::get('/map/search/{id}','PokemonCtrl@searchMapById');
 
 Route::get('/suggestion','PokemonCtrl@suggestion');
 Route::post('/suggestion','PokemonCtrl@sendSuggestion');
@@ -47,9 +50,10 @@ Route::get('/admin/pokemon/type/delete/{id}','AdminCtrl@deletePokemonType');
 Route::get('/admin/pokemon/evolve','AdminCtrl@evolve');
 Route::post('/admin/pokemon/evolve','AdminCtrl@saveEvolve');
 Route::get('/admin/pokemon/evolve/{id}','AdminCtrl@editEvolve');
+Route::post('/admin/pokemon/evolve/update/{id}','AdminCtrl@updateEvolve');
 Route::get('/admin/pokemon/evolve/delete/{id}','AdminCtrl@deleteEvolve');
-Route::post('/admin/evolve/search','AdminCtrl@searchEvolve');
-Route::get('/admin/evolve/search','AdminCtrl@searchEvolve');
+Route::post('/admin/pokemon/evolve/search','AdminCtrl@searchEvolve');
+Route::get('/admin/pokemon/evolve/search','AdminCtrl@searchEvolve');
 
 Route::get('/admin/map','AdminCtrl@map');
 Route::post('/admin/map','AdminCtrl@saveMap');

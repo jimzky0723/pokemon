@@ -78,7 +78,7 @@
                         @foreach($data as $row)
                             <div class="col-sm-4">
                                 <div class="card my-4 background-{{ strtolower($row->rarity) }}">
-                                    <a href="#">
+                                    <a href="{{ url('pokemon/info/'.$row->id) }}">
                                         <img class="card-img-top img-thumbnail" src="{{ url('uploads/'.$row->image) }}" alt="Card image cap">
                                     </a>
                                     <div class="card-body card-list" style="padding: 0px;">
@@ -102,6 +102,9 @@
                                             <li class="list-group-item">
                                                 <label>Rarity:</label><br />
                                                 <span class="">{{ $row->rarity }}</span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <a href="{{ url('pokemon/info/'.$row->id) }}" class="btn btn-success btn-sm btn-block">More Details</a>
                                             </li>
                                         </ul>
                                     </div>

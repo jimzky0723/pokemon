@@ -104,6 +104,15 @@ class PokemonCtrl extends Controller
         return self::map();
     }
 
+    public function searchMapById($id)
+    {
+        Session::put('mapKeyword',[
+            'name' => '',
+            'pokemon' => $id
+        ]);
+        return redirect('map/search');
+    }
+
     static function getPokemonInfo($id)
     {
         $info = Pokemon::find($id);
@@ -135,5 +144,16 @@ class PokemonCtrl extends Controller
         $q->save();
 
         return redirect()->back()->with('sent',true);
+    }
+
+    public function pokemonInfo($id)
+    {
+        $info = Pokemon::find($id);
+        if(!$info)
+            return redirect('/pokemon');
+
+        return view('page.info',[
+            'info' => $info
+        ]);
     }
 }

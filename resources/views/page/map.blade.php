@@ -95,44 +95,49 @@
                                                 <span class="text-success">{{ $row->name }}</span>
                                             </li>
                                             <li class="list-group-item">
+                                                <a href="#">
                                                 <?php $info = \App\Http\Controllers\PokemonCtrl::getPokemonInfo($row->common); ?>
                                                 @if($info->rarity)
+                                                    <a href="{{ url('pokemon/info/'.$row->common) }}">
                                                     <img src="{{ url('uploads/'.$info->image) }}" class="img-thumbnail pull-right" width="50" />
                                                 @endif
                                                 <label>Common:</label><br />
                                                 <span class="{{ strtolower($info->rarity) }}">{{ $info->name }}</span>
+                                                </a>
                                             </li>
                                             <li class="list-group-item">
+                                                <a href="#">
                                                 <?php $info = \App\Http\Controllers\PokemonCtrl::getPokemonInfo($row->normal); ?>
                                                 @if($info->rarity)
+                                                    <a href="{{ url('pokemon/info/'.$row->normal) }}">
                                                     <img src="{{ url('uploads/'.$info->image) }}" class="img-thumbnail pull-right" width="50" />
                                                 @endif
                                                 <label>Normal:</label><br />
                                                 <span class="{{ strtolower($info->rarity) }}">{{ $info->name }}</span>
+                                                </a>
                                             </li>
                                             <li class="list-group-item">
+                                                <a href="#">
                                                 <?php $info = \App\Http\Controllers\PokemonCtrl::getPokemonInfo($row->rare); ?>
                                                 @if($info->rarity)
+                                                    <a href="{{ url('pokemon/info/'.$row->rare) }}">
                                                     <img src="{{ url('uploads/'.$info->image) }}" class="img-thumbnail pull-right" width="50" />
                                                 @endif
                                                 <label>Rare:</label><br />
                                                 <span class="{{ strtolower($info->rarity) }}">{{ $info->name }}</span>
+                                                </a>
                                             </li>
                                             <li class="list-group-item">
+                                                <a href="#">
                                                 <?php $info = \App\Http\Controllers\PokemonCtrl::getPokemonInfo($row->epicOrLegendary); ?>
                                                 @if($info->rarity)
+                                                    <a href="{{ url('pokemon/info/'.$row->epicOrLegendary) }}">
                                                     <img src="{{ url('uploads/'.$info->image) }}" class="img-thumbnail pull-right" width="50" />
                                                 @endif
                                                 <label>Epic / Legendary:</label><br />
                                                 <span class="{{ strtolower($info->rarity) }}">{{ $info->name }}</span>
+                                                </a>
                                             </li>
-                                            @if(\Illuminate\Support\Facades\Session::get('isLogin'))
-                                            <li class="list-group-item text-right" style="padding-top:8px;">
-                                                <a href="{{ url('admin/map/update/'.$row->id) }}" class="btn btn-sm btn-info">Edit</a>
-                                                <a href="#" data-link="{{ url('admin/map/delete/'.$row->id) }}" class="btn-delete btn btn-sm btn-danger">Delete</a>
-
-                                            </li>
-                                            @endif
                                         </ul>
                                     </div>
                                 </div>
