@@ -301,6 +301,105 @@ class AdminCtrl extends Controller
         return redirect('admin/map')->with('deleted',true);
     }
 
+    public function evolve($info = null)
+    {
+        $session = Session::get('pokemonEvolveKeyword');
+        $rarity = Session::get('rarityEvolveKeyword');
+        $data = Map::select('*');
+        if($session)
+        {
+            $session = (object)$session;
+            if($session->name)
+            {
+                $data = $data->where('name','like',"%$session->name%");
+            }
+            if($session->pokemon)
+            {
+                $data = $data->where(function($q) use ($session) {
+                    $q->where('common',$session->pokemon)
+                        ->orwhere('normal',$session->pokemon)
+                        ->orwhere('rare',$session->pokemon)
+                        ->orwhere('epicOrLegendary',$session->pokemon);
+                });
+            }
+        }
+        if($rarity)
+        {
+            $data = $data->where($rarity,'>',0);
+        }
+        $data = $data->orderBy('name','asc')
+            ->paginate(12);
+        return view('admin.map',[
+            'data' => $data,
+            'info' => $info,
+            'map' => Map::select('name')->orderBy('name','asc')->groupBy('name')->get(),
+            'common' => Pokemon::where('rarity','Common')->orderBy('name','asc')->get(),
+            'normal' => Pokemon::where('rarity','Normal')->orderBy('name','asc')->get(),
+            'rare' => Pokemon::where('rarity','Rare')->orderBy('name','asc')->get(),
+            'legendary' => Pokemon::where('rarity','Legendary')
+                ->orwhere('rarity','Epic')
+                ->orderBy('name','asc')
+                ->get(),
+        ]);
+    }
+
+    public function searchEvolve(Request $request)
+    {
+        if($request->isMethod('post')){
+            $data = array(
+                'name' => $request->map,
+                'pokemon' => $request->pokemon
+            );
+            Session::put('rarityMapKeyword',$request->rarity);
+            Session::put('mapKeyword',$data);
+        }
+        return self::map();
+    }
+
+    public function editEvolve($id)
+    {
+        $info = Map::find($id);
+        return self::map($info);
+    }
+
+    public function saveEvolve(Request $request)
+    {
+        $tbl = new Map();
+        $tbl->name = $request->name;
+        $tbl->common = $request->common;
+        $tbl->normal = $request->normal;
+        $tbl->rare = $request->rare;
+        $tbl->epicOrLegendary = $request->epicOrLegendary;
+        $tbl->save();
+
+        Session::put('mapKeyword',[
+            'name' => $request->name,
+            'pokemon' => ''
+        ]);
+        return redirect()->back()->with('added',true);
+    }
+
+    public function updateEvolve(Request $request)
+    {
+
+        Map::where('id',$request->currentId)
+            ->update([
+                'name' => $request->name,
+                'common' => $request->common,
+                'normal' => $request->normal,
+                'rare' => $request->rare,
+                'epicOrLegendary' => $request->epicOrLegendary,
+            ]);
+
+        return redirect()->back()->with('updated',true);
+    }
+
+    public function deleteEvolve($id)
+    {
+        Map::where('id',$id)->delete();
+        return redirect('admin/map')->with('deleted',true);
+    }
+
     public function suggestion()
     {
         return view('admin.suggestion',[

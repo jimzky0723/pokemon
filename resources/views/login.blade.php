@@ -176,6 +176,7 @@
             <input type="password" class="form-control" placeholder="Password" name="password" required>
 
             <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
+            <button class="btn btn-lg btn-primary btn-block btn-signin btn-back" type="submit">Back</button>
         </form><!-- /form -->
 
     </div><!-- /card-container -->
@@ -185,6 +186,11 @@
 <script src="{{ url('/') }}/vendor/jquery/jquery.min.js"></script>
 <script src="{{ url('/') }}/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 @yield('script')
+<script>
+    $('.btn-back').on('click',function () {
+        window.location.href = "{{ url('/') }}";
+    })
+</script>
 </body>
 
 </html>

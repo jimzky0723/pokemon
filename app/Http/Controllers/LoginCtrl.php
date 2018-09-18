@@ -26,7 +26,7 @@ class LoginCtrl extends Controller
             if(Hash::check($request->password,$login->password)){
                 Session::put('user',$login);
                 Session::put('isLogin',true);
-                return redirect('/');
+                return redirect('/admin/suggestion');
             }else{
                 return redirect()->back()->with('error',true);
             }

@@ -63,7 +63,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
         <a class="navbar-brand" href="#">
-            <img src="{{ url('logo.png') }}" style="height:30px !important;">
+            <a href="{{ url('/login') }}"><img src="{{ url('logo.png') }}" style="height:30px !important; margin-right:5px;"></a>
             Legend Trainer Map Guide</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -106,8 +106,9 @@
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="{{ url('admin/pokemon') }}">Pokemon</a>
                         <a class="dropdown-item" href="{{ url('admin/pokemon/type') }}">Pokemon Type</a>
+                        <a class="dropdown-item" href="{{ url('admin/pokemon/evolve') }}">Pokemon Evolve</a>
                         <a class="dropdown-item" href="{{ url('admin/map') }}">Map</a>
-                        <a class="dropdown-item" href="{{ url('admin/suggestion') }}">Suggestions</a>
+                        <a class="dropdown-item" href="{{ url('admin/suggestion') }}">Suggestions <span class="badge badge-warning">{{ \App\Suggestion::count() }}</span> </a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{{ url('/logout') }}">Logout</a>
                     </div>
