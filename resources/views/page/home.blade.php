@@ -35,14 +35,16 @@
                 </footer>
             </blockquote>
             <hr />
-            <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{ url('video/video.mp4') }}" loop="true" controls="false"></iframe>
+            <div align="center" class="embed-responsive embed-responsive-16by9">
+                <video muted autoplay loop class="embed-responsive-item">
+                    <source src="{{ url('video/video.mp4') }}" type="video/mp4">
+                </video>
             </div>
             <hr />
             <div class="disclaimer">
                 <h3>Disclaimer</h3>
                 <p>Welcome to Legend Trainer Guide! This is a free site for all trainers for easy hunting of Pokemon.</p>
-                <p>The information provided by our website is for general information purposes and guidance only. All information on the site is based on the Legend Trainer Game and has been approved by the Owner of the Game. However, we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability or completeness of any information on the site.</p>
+                <p>The information provided by our website is for general information purposes and guidance only. All information on the site is based on the Legend Trainer Game. However, we make no representation or warranty of any kind, express or implied, regarding the accuracy, adequacy, validity, reliability, availability or completeness of any information on the site.</p>
                 <p>Under no circumstance shall we have any liability to you for any loss or damage of any kind incurred as a result of the use of the site. Your use of the site and your reliance on any information on the site is solely at your own risk.</p>
 
             </div>

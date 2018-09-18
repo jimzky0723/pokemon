@@ -78,11 +78,6 @@
             <div class="content-right">
                 <h3>
                     List of Maps
-                    <div class="pull-right">
-                        <a href="{{ url('admin/map') }}" class="btn btn-success btn-sm">
-                            Add New
-                        </a>
-                    </div>
                 </h3>
                 <hr />
                 <div class="row">
