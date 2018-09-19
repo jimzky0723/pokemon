@@ -8,6 +8,7 @@ use App\Pokemon;
 use App\PokemonType;
 use App\Suggestion;
 use App\Type;
+use App\Versus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
@@ -409,5 +410,56 @@ class AdminCtrl extends Controller
     {
         Suggestion::where('id',$id)->delete();
         return redirect()->back()->with('deleted',true);
+    }
+
+
+    public function versus()
+    {
+        $filter = Type::select('*');
+        $keyword = Session::get('versusKeyword');
+        if($keyword){
+            $filter = $filter->where('name',$keyword);
+        }
+        $filter = $filter->orderBy('name','asc')->get();
+
+        return view('admin.versus',[
+            'types' => Type::orderBy('name','asc')->get(),
+            'filter' => $filter
+        ]);
+    }
+
+    public function searchVersus(Request $req)
+    {
+        Session::put('versusKeyword',$req->type);
+        return self::versus();
+    }
+
+    static function compareType($attacker,$defender)
+    {
+        $chk = Versus::where('attacker',$attacker)
+                    ->where('defender',$defender)
+                    ->orderBy('id','desc')
+                    ->first();
+        if($chk){
+            return $chk->damage;
+        }
+        return -1;
+    }
+
+    public function updateVersus($attacker,$defender,$status)
+    {
+        $damage = 2;
+        if($status=='lose')
+        {
+            $damage = 0;
+        }
+        $versus = Versus::updateOrCreate([
+            'attacker' => $attacker,
+            'defender' => $defender
+        ],[
+            'damage' => $damage
+        ]);
+
+        return redirect()->back()->with('updated',true);
     }
 }
