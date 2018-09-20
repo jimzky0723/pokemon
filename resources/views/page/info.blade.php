@@ -2,7 +2,7 @@
 
 @section('css')
     <style>
-        .card-body label {
+        .card-list label {
             margin-bottom: 0px;
             color: #9a9a9a;
             font-weight: bold;
@@ -14,7 +14,20 @@
         li.list-group-item {
             padding: 3px 7px;
         }
-        .list-group-item {
+
+        .pokemon-body label {
+            margin-bottom: 0px;
+            color: #9a9a9a;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+        .card-pokemon {
+            padding: 5px;
+        }
+        .card-pokemon li.list-group-item {
+            padding: 3px 7px;
+        }
+        .card-pokemon .list-group-item {
             background: none;
         }
     </style>
@@ -23,9 +36,9 @@
 @section('content')
     <div class="row">
         <div class="col-md-3">
-            <div class="card text-white bg-dark my-4">
+            <div class="card text-white bg-dark my-4 card-pokemon">
                 <div class="card-header">Pokemon Info</div>
-                <div class="card-body">
+                <div class="card-body pokemon-body">
                     <center>
                         <img src="{{ url('uploads/'.$info->image) }}" class="img-thumbnail img-responsive" />
                     </center>
@@ -54,14 +67,23 @@
                             <a href="{{ url('map/search/'.$info->id) }}" class="btn btn-sm btn-warning btn-block my-2">
                                 Search in Map
                             </a>
+                            @if($best)
+                            <a href="{{ url('pokemon/info/'.$info->id) }}" class="btn btn-sm btn-success btn-block my-2">
+                                Best Opponent
+                            </a>
+                            @else
+                            <a href="{{ url('pokemon/info/worst/'.$info->id) }}" class="btn btn-sm btn-danger btn-block my-2">
+                                Worst Opponent
+                            </a>
+                            @endif
                         </li>
                     </ul>
                 </div>
             </div>
 
-            <div class="card text-white bg-dark my-4">
+            <div class="card text-white bg-dark my-4 card-pokemon">
                 <div class="card-header">Evolve</div>
-                <div class="card-body">
+                <div class="card-body pokemon-body">
                     <ul class="list-group list-group-flush">
                         <?php
                             $evolve = \App\Evolve::find($info->evolve);
@@ -128,10 +150,55 @@
 
         <div class="col-md-9">
             <div class="content-right">
+                <?php
+                    $types = \App\PokemonType::where('pokemonId',$info->id)->get();
+                ?>
+                @foreach($types as $row)
                 <h3>
-                    Best Opponent
-                    <hr />
+                    {{ (!$best) ? 'Best':'Worst' }} Opponent for <span class="{{ (!$best) ? 'text-success':'text-danger' }}">{{ \App\Type::find($row->typeId)->name }}</span>
                 </h3>
+                    <?php
+                        if(!$best){
+                            $opp = \App\Http\Controllers\PokemonCtrl::getBestOpponent($row->typeId);
+                        }else{
+                            $opp = \App\Http\Controllers\PokemonCtrl::getWorstOpponent($row->typeId);
+                        }
+                        ?>
+                    <hr />
+                    <div class="row">
+                        @foreach($opp as $r)
+                            <?php $row = \App\Pokemon::find($r->pokemonId); ?>
+                            <div class="col-sm-3">
+                                <div class="card my-4 background-{{ strtolower($row->rarity) }}">
+                                    <a href="{{ url('pokemon/info/'.$row->id) }}">
+                                        <img class="card-img-top" src="{{ url('uploads/'.$row->image) }}" alt="{{ $row->name }}">
+                                    </a>
+                                    <div class="card-body card-list" style="padding: 0px;">
+                                        <?php
+                                        $types = \App\PokemonType::where('pokemonId',$row->id)->get();
+                                        $tmp = array();
+                                        foreach($types as $type){
+                                            $tmp[] = \App\Type::find($type->typeId)->name;
+                                        }
+                                        $types = implode(', ',$tmp);
+                                        ?>
+                                        <ul class="list-group list-group-flush">
+                                            <li class="list-group-item">
+                                                <label>Name:</label><br />
+                                                <span class="{{ strtolower($row->rarity) }}">{{ $row->name }}</span>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <label>Type:</label><br />
+                                                <span class="">{{ $types }}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <hr />
+                @endforeach
             </div>
         </div>
     </div>

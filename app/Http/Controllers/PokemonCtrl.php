@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Map;
 use App\Pokemon;
+use App\PokemonType;
 use App\Suggestion;
 use App\Type;
+use App\Versus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
 class PokemonCtrl extends Controller
@@ -128,6 +131,8 @@ class PokemonCtrl extends Controller
         }
     }
 
+
+
     public function suggestion()
     {
         return view('page.suggestion');
@@ -146,14 +151,54 @@ class PokemonCtrl extends Controller
         return redirect()->back()->with('sent',true);
     }
 
-    public function pokemonInfo($id)
+    public function pokemonInfo($id, $best = false)
     {
         $info = Pokemon::find($id);
         if(!$info)
             return redirect('/pokemon');
 
         return view('page.info',[
-            'info' => $info
+            'info' => $info,
+            'best' => $best
         ]);
+    }
+
+    public function pokemonInfoWorst($id)
+    {
+        return self::pokemonInfo($id,true);
+    }
+
+    static function getBestOpponent($typeId)
+    {
+        $opp = Versus::where('attacker',$typeId)
+            ->where('damage',2)
+            ->get();
+
+        $pokemon = DB::table('pokemontype')
+            ->select('pokemontype.pokemonId')
+            ->join('pokemon','pokemon.id','=','pokemontype.pokemonId');
+        foreach($opp as $row){
+            $pokemon = $pokemon->orwhere('typeId',$row->defender);
+        }
+        return $pokemon->orderBy('pokemon.level','asc')
+            ->groupBy('pokemontype.pokemonId')
+            ->get();
+    }
+
+    static function getWorstOpponent($typeId)
+    {
+        $opp = Versus::where('attacker',$typeId)
+            ->where('damage',0)
+            ->get();
+
+        $pokemon = DB::table('pokemontype')
+            ->select('pokemontype.pokemonId')
+            ->join('pokemon','pokemon.id','=','pokemontype.pokemonId');
+        foreach($opp as $row){
+            $pokemon = $pokemon->orwhere('typeId',$row->defender);
+        }
+        return $pokemon->orderBy('pokemon.level','asc')
+            ->groupBy('pokemontype.pokemonId')
+            ->get();
     }
 }

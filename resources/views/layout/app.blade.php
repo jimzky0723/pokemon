@@ -111,6 +111,7 @@
                         <a class="dropdown-item" href="{{ url('admin/pokemon') }}">Pokemon</a>
                         <a class="dropdown-item" href="{{ url('admin/pokemon/type') }}">Pokemon Type</a>
                         <a class="dropdown-item" href="{{ url('admin/pokemon/evolve') }}">Pokemon Evolve</a>
+                        <a class="dropdown-item" href="{{ url('admin/pokemon/versus') }}">Versus</a>
                         <a class="dropdown-item" href="{{ url('admin/map') }}">Map</a>
                         <a class="dropdown-item" href="{{ url('admin/suggestion') }}">Suggestions <span class="badge badge-warning">{{ \App\Suggestion::count() }}</span> </a>
                         <div class="dropdown-divider"></div>
@@ -128,7 +129,7 @@
     @yield('content')
 </div>
 <!-- /.container -->
-
+@yield('modal')
 <!-- Footer -->
 <footer class="py-5 bg-dark">
     <div class="container">

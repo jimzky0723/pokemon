@@ -176,7 +176,7 @@
             <input type="password" class="form-control" placeholder="Password" name="password" required>
 
             <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit">Sign in</button>
-            <button class="btn btn-lg btn-primary btn-block btn-signin btn-back" type="submit">Back</button>
+            <button class="btn btn-lg btn-primary btn-block btn-signin btn-back" type="button">Back</button>
         </form><!-- /form -->
 
     </div><!-- /card-container -->
